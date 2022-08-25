@@ -38,16 +38,22 @@ let redirect ~f =
     read_up_to := pos;
     Buffer.add_channel buf ic len
   in
-  Fun.protect
-    (fun () -> f ~capture)
-    ~finally:(fun () ->
-      close_in_noerr ic;
-      Unix.close fd_out;
-      Unix.dup2 stdout_backup Unix.stdout;
-      Unix.dup2 stderr_backup Unix.stderr;
-      Unix.close stdout_backup;
-      Unix.close stderr_backup;
-      Sys.remove filename)
+  try
+    Fun.protect
+      (fun () -> f ~capture)
+      ~finally:(fun () ->
+          close_in_noerr ic;
+          Unix.close fd_out;
+          Unix.dup2 stdout_backup Unix.stdout;
+          Unix.dup2 stderr_backup Unix.stderr;
+          Unix.close stdout_backup;
+          Unix.close stderr_backup;
+          (* Sys.remove filename *))
+  with ex ->
+    Fmt.epr "Buffer.add_channel: %a@." Fmt.exn ex;
+    Unix.system ("ls -l >&2 " ^ filename) |> ignore;
+    Unix.system ("cat >&2 " ^ filename) |> ignore;
+    raise ex
 
 module Lexbuf = struct
   open Lexing

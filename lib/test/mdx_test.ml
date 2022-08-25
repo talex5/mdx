@@ -274,6 +274,7 @@ let preludes ~prelude ~prelude_str =
 let run_exn ~non_deterministic ~silent_eval ~record_backtrace ~syntax ~silent
     ~verbose_findlib ~prelude ~prelude_str ~file ~section ~root ~force_output
     ~output ~directives ~packages ~predicates =
+  Logs.set_level ~all:true (Some Logs.Debug);
   Printexc.record_backtrace record_backtrace;
   let syntax =
     match syntax with Some syntax -> Some syntax | None -> Syntax.infer ~file

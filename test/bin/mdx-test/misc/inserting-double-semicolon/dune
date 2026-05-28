@@ -3,9 +3,10 @@
  (deps
   (package mdx))
  (action
-  (with-outputs-to
-   %{target}
-   (run %{bin:ocaml-mdx} test --output=- %{dep:test-case.md}))))
+   (progn
+     (run %{bin:ocaml-mdx} test %{dep:test-case.md})
+     (run sh -c "echo hi > test-case.actual")
+     )))
 
 (rule
  (alias runtest)

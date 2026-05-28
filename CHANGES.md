@@ -1,3 +1,8 @@
+### 2.6.0
+
+- If a test takes longer than 5 seconds, display a warning with the test's location (#476, @talex5).
+  Also display the location on Ctrl-C.
+
 ### 2.5.2
 
 #### Added

@@ -14,6 +14,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
       - name: Use dune
-        uses: ocaml-dune/setup-dune@v0.0.1
+        uses: ocaml-dune/setup-dune@v2
         with:
           automagic: true
+          version: 3.23.1
